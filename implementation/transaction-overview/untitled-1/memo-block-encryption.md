@@ -46,12 +46,10 @@ To decrypt a note the user obtains the corresponding $$key_i$$. There are two wa
 
 Shared secrets block contains symmetric keys for account and notes encryption: $$keys = (key_a, key_1, key_2, ...)$$. The following actions are used to encrypt these keys:
 
-* Generate a random 256-bit key: $$a_p = random()$$
-* Calculate an ephemeral public key for the shared secrets: $$A_p = a_p G$$
-* Derive a symmetric encryption key for the shared secrets: $$key_p = keccak256(A_p acc.\eta)$$
-* Encrypt $$keys$$: $$keys^{enc} = ChaCha20Poly1305_{key_p}^{nonce}(keys)$$
-* Put $$(A_p, keys^{enc})$$ in the shared secrets block
+* Generate a random 192-bit nonce: $$nonce = random()$$
+* Encrypt $$keys$$: $$keys^{enc} = XChaCha20Poly1305_{\kappa}^{nonce}(keys)$$
+* Put $$(nonce, keys^{enc})$$ in the shared secrets block
 
 {% hint style="info" %}
-$$keys^{enc}$$ could be decrypted with the $$\eta$$ key only.
+$$keys^{enc}$$ could be decrypted with the $$\kappa$$ key only.
 {% endhint %}
